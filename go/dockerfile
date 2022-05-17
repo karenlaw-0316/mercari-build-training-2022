@@ -36,7 +36,6 @@ RUN go get "gorm.io/gorm"
 WORKDIR /
 
 COPY ./app/*.go .
-# RUN apk update && apk add --no-cache gcc
 RUN go build -o build2022/app
 
 EXPOSE 9000
