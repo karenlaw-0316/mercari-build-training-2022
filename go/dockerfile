@@ -1,4 +1,44 @@
-FROM alpine
+FROM golang:1.18-alpine
 
+# WORKDIR /app
+
+# COPY go.mod ./
+# COPY go.sum ./
+# RUN go mod download
+
+# COPY *.go ./
+
+# RUN go build -o /docker-gs-ping
+
+# EXPOSE 8080
+
+# CMD [ "/docker-gs-ping" ]
+# CMD [ "/docker-gs-ping" ]
 # STEP4-4では以下は変更しない
-CMD ["go", "version"]
+# CMD ["go", "version"]
+
+WORKDIR /
+
+RUN mkdir db
+RUN mkdir app
+
+COPY go.mod ./
+COPY go.sum ./
+
+RUN go mod tidy
+RUN go get "github.com/labstack/echo/v4"
+RUN go get "github.com/labstack/echo/v4/middleware"
+RUN go get "github.com/labstack/gommon/log"
+RUN go get "github.com/mattn/go-sqlite3"
+RUN go get "gorm.io/driver/sqlite"
+RUN go get "gorm.io/gorm"
+
+WORKDIR /
+
+COPY ./app/*.go .
+# RUN apk update && apk add --no-cache gcc
+RUN go build -o build2022/app
+
+EXPOSE 9000
+
+CMD [ "/build2022/app" ]
